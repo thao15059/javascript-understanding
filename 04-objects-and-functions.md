@@ -111,3 +111,24 @@ console.log(greet.language); // English
 ```
 
 Khi chúng ta tạo hàm greet, hàm greet này sẽ nằm trong bộ nhớ. Trong trường hợp này nó nằm ở Global Object. Có Property Name là greet, Property Code `console.log('Hi')`. Chúng ta nên suy nghĩ Function như một Container chứa code.
+
+# Function Statements và Function Expressions
+
+Expression: là một đoạn code dẫn đến một giá trị. Nó không cần phải lưu biến.
+
+```javascript
+a = 3; // trả về giá trị 3
+1 + 2; // trả về 3 nhưng không lưu nó vào
+```
+
+Giá trị có thể là Number, String, Object, ...Đây là ví dụ về Expression
+
+Statement: không có trả về giá trị ví dụ như if
+
+```javascript
+var a;
+if (a === 3) {
+}
+```
+
+If là statement và bên trong lệnh If đó là Expression
