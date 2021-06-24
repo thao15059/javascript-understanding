@@ -242,3 +242,105 @@ c = { greeting: "howdy" }; // toán tử  = đã tạo một địa chỉ mới 
 console.log(c); // { greeting: "howdy" }
 console.log(d); // { greeting: "salu" }
 ```
+
+# OBJECTS, FUNCTION, THIS
+
+Ở giai đoạn CREATION PHASE sẽ tạo ra:
+
+- VARIABLE ENVIROMENT
+- OUTER ENVIROMENT (scope chain => tìm kiếm biến ở các các môi trường khác)
+- this
+
+```javascript
+console.log(this); // Window (Global Object ở môi trường Browser)
+
+function a() {
+  console.log(this);
+  this.newVar = "hi";
+}
+
+a(); // Window
+
+console.log(newVar); // hi
+
+var b = function () {
+  console.log(this);
+};
+
+b(); // Window
+
+// => Khi tạo function ở môi trường ngoài thì this là Global Object (window)
+
+var c = {
+  name: "Object",
+  log: function () {
+    console.log(this);
+  },
+};
+
+c.log(); // Object c => this ở đây là Object c
+
+var d = {
+  name: "Object",
+  log: function () {
+    (this.name = "Updated Object"), console.log(this);
+  },
+};
+
+d.log(); // Giá trị name trong Object d cũng sẽ thay đổi
+
+var e = {
+  name: "Object",
+  log: function () {
+    (this.name = "Updated Object"), console.log(this);
+
+    var setName = function (name) {
+      this.name = name; // this ở đây là Global (Window) chứ không phải object e
+    };
+
+    setName("Updated Object Again!");
+  },
+};
+
+e.log(); // name = "Updated Object"
+console.log(name); // Updated Object Again!
+
+// Có một pattern có thể khắc phục vấn đề này
+var f = {
+  name: "Object",
+  log: function () {
+    var self = this;
+    (self.name = "Updated Object"), console.log(this);
+
+    var setName = function (name) {
+      self.name = name;
+    };
+
+    setName("Updated Object Again!");
+  },
+};
+
+f.log(); // Updated Object Again! Kết quả như ý của chúng ta.
+```
+
+# ARRAY
+
+Trong JS là một Collection của tất cả mọi thứ
+
+```javascript
+var arr = [1, 2, 3];
+var arr2 = ["a", 1, { greeting: "hi" }];
+var arr3 = [
+  1,
+  false,
+  {
+    name: "Thao",
+  },
+  function (name) {
+    var greeting = "Hello ";
+    console.log(greeting + name);
+  },
+];
+
+arr3[3](arr3[2].name); // Hello Thao
+```
