@@ -132,3 +132,113 @@ if (a === 3) {
 ```
 
 If là statement và bên trong lệnh If đó là Expression
+
+Một ví dụ khác:
+
+```javascript
+function greet() {
+  console.log("hi");
+}
+```
+
+Hàm greet chỉ là một Statements vì khi chạy không có một giá trị gì trả về. Và khi JS Engine thấy nó sẽ bỏ nó vào bộ nhớ và được hoisted trong Createtion Phase ở Execution Context vì vậy có thể sử dụng trươc khi nó được định nghĩa.
+
+```javascript
+var anonymousGreet = function () {
+  console.log("hi");
+};
+```
+
+Nhìn chúng có vẻ giống nhau nhưng thực chất là khác nhau. Ví dụ dưới này là Function Expression. Vì sao? Lý do nó trả về giá trị, trong JS Function cũng là một object, và ở đây là anonymous function (không có tên) và sau khi khởi tạo nó trả về kết quả là object và gán vào biến anonymousGreet. Vì vậy ở đây đã trả về kết quả nên nó là Function Expression. Cách gọi nó cũng y như trên đó là `anonymousGreet()`.
+
+![04](04.png)
+Cách khởi tạo hàm trên
+
+![05](05.png)
+Cách khởi tạo hàm dưới
+
+```javascript
+anonymousGreet(); // sẽ không chạy vì biến này chỉ mới khởi tạo giá trị và không gán => Lỗi undefined is not a function
+
+var anonymousGreet = function () {
+  console.log("hi");
+};
+
+anonymousGreet(); // hi
+```
+
+Một ví dụ khác
+
+```javascript
+function log(a) {
+  console.log(a);
+}
+
+log(3); // 3
+log("Hi"); // Hi
+log({ num: 3 }); // Object { num: 3 }
+log(function () {
+  console.log("a");
+}); // Object function
+
+function log(a) {
+  a(); // Đây là cách chạy khi chúng ta truyền function vào tham số
+}
+```
+
+# BY VALUE VÀ BY REFENRCE
+
+Ví dụ về BY VALUE
+
+Ta có một biến a là kiểu Primitive Value. Khi biến a khởi tạo và có giá trị nó sẽ có một địa chỉ trong bộ nhớ. Và chúng ta có thể `b = a` hoặc truyền a vào hàm b `b(a)`. Nếu nó là kiểu Primitive Value trong JS thì b sẽ copy giá trị của a và được tạo ra một địa chỉ mới. Đây được gọi là BY VALUE.
+
+![06](06.png)
+
+Ví dụ về BY REFENRCE
+
+Tương tự như trên nhưng nó là Object thì sẽ khác
+![07](07.png)
+
+Cả 2 biến đều là Object đều trỏ cùng một địa chỉ.
+
+```javascript
+// BY VALUE
+var a = 3;
+var b;
+
+b = a;
+a = 2;
+
+console.log(a); // 2
+console.log(b); // 3, BY VALUE, đã copy giá trị và có địa chỉ khác với biến a
+```
+
+# Mutate
+
+Nó có thể thay đổi một thứ gì đó, "immutate nó không thể thay đổi"
+
+```javascript
+// BY REFENRCE
+var c = { greeting: "hi" };
+var d;
+
+d = c;
+c.greeting = "hola"; // Mutate Object
+
+console.log(c); // { greeting: "hola" }
+console.log(d); // { greeting: "hola" }
+
+// BY REFENRCE ngay cả khi là tham số
+function changeGreeting(obj) {
+  obj.greeting = "salu";
+}
+
+changeGreeting(d);
+
+console.log(c); // { greeting: "salu" }
+console.log(d); // { greeting: "salu" }
+
+c = { greeting: "howdy" }; // toán tử  = đã tạo một địa chỉ mới cho c
+console.log(c); // { greeting: "howdy" }
+console.log(d); // { greeting: "salu" }
+```
