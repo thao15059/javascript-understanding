@@ -344,3 +344,47 @@ var arr3 = [
 
 arr3[3](arr3[2].name); // Hello Thao
 ```
+
+# _arguments_ và spread
+
+Trong giai đoạn CREATION PHASE sẽ tạo ra:
+
+- Variable Enviroment
+- Outer Enviroment
+- this
+- arguments (chứa toàn bộ tham số khi truyền vào function)
+
+arguments: một tên khác khi chúng ta truyền parameter vào function.
+
+```javascript
+function greet(firstname, lastname, language) {
+  console.log(firstname);
+  console.log(lastname);
+  console.log(lastname);
+}
+
+greet(); // undefined
+greet("John", "Doe", "en"); // console.log(arguments) => ['John', 'Doe', 'en']. arguments giống array nhưng không phải array
+```
+
+# Và về Spread
+
+```javascript
+function greet(firstname, lastname, language, ...otherParams) {
+  console.log(otherParams);
+}
+
+greet("a", "b", "c", "d", "e"); // ['d', 'e']
+```
+
+# Overloading
+
+Ở những ngôn ngữ khác sẽ có Function Overload (cùng tên nhưng khác tham số) nhưng JS thì không có. Có 1 cách để chúng ta hiện thực nó.
+
+![08](08.png)
+
+# Syntax Parser More
+
+- Đọc code của chúng ta kiểm tra xem có đúng ngữ pháp hay không? Nếu không đúng thì sẽ throw Error
+- Khi đọc thì sẽ đọc từng ký tự và sẽ giả định nếu đúng theo như nó giả định thì chương trình sẽ chạy.
+- Trong quá trình Syntax Parser, chương trình có thể thay đổi chứ không nhất thiết phải như chương trình cũ.
