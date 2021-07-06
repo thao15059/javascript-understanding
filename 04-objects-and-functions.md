@@ -443,3 +443,37 @@ function(name) {
   return `Hello ${name}`;
 })('John'); // Hello John => hợp lệ vì nó đã là function expresssion
 ```
+
+# Framework Aside IIFEs và Safe Code
+
+```javascript
+(function (name) {
+  var greeting = "Hello";
+  console.log(greeting + " " + name);
+})("John"); // Hello John
+```
+
+![09](09.png)
+
+Nó tạo ra một Execution Context và tạo ra một biến greeting mà không ảnh hưởng gì đến global
+
+```javascript
+var greeting = "Hola";
+
+(function (name) {
+  var greeting = "Hello";
+  console.log(greeting + " " + name);
+})("John"); // Hello John
+
+console.log(greeting); // Hola
+```
+
+![10](10.png)
+
+Nó sẽ không chạm vào biến greeting vì môi trường thực thi của nó khác nhau. Một thằng ở Global 1 thằng ở trong chính nó.
+
+![11](11.png)
+
+Cách để sử dụng Global Object để truy cập nó.
+
+# Closures
