@@ -388,3 +388,58 @@ greet("a", "b", "c", "d", "e"); // ['d', 'e']
 - Đọc code của chúng ta kiểm tra xem có đúng ngữ pháp hay không? Nếu không đúng thì sẽ throw Error
 - Khi đọc thì sẽ đọc từng ký tự và sẽ giả định nếu đúng theo như nó giả định thì chương trình sẽ chạy.
 - Trong quá trình Syntax Parser, chương trình có thể thay đổi chứ không nhất thiết phải như chương trình cũ.
+
+# Syntax Parser tự động thêm dấu ;
+
+Khi chúng ta viết Code thì nó sẽ tự động thêm dấu ; vào cho chúng ta.
+
+```javascript
+function getPerson() {
+  return
+  {
+    firstname: 'Thao',
+  }
+}
+
+console.log(getPerson()); // undefined
+```
+
+Lý do return undefined vì nó tự thêm dấu ; vào return. Cách để hạn chế đó.
+
+```javascript
+function getPerson() {
+  return {
+    firstname: "Thao",
+  };
+}
+
+console.log(getPerson()); // { firstname: 'Thao' }
+```
+
+Thì sẽ ra đúng kết quả chúng ta mong muốn.
+
+# White Space
+
+Chỉ là khoảng trắng khi chúng ta xuống hàng, nhấn Tab hoặc khoảng trắng.
+
+# Immediately Invoked Functions Expressions (IIFEs)
+
+Là Function sẽ được chạy ngay lập tức sau khi nó được khởi tạo.
+
+```javascript
+var greeting = function(name) {
+  console.log(`Hello ${name}`)
+}('John'); // Hello John => đây là string chứ không còn là function nữa
+
+3; // hợp lệ vẫn chạy được không báo lỗi
+
+"I am a string"; // hợp lệ
+
+function(name) {
+  return `Hello ${name}`;
+} // sẽ báo lỗi vì syntax parser sẽ ngầm hiểu nó là function statement nên sẽ cần một cái tên
+
+(function(name) {
+  return `Hello ${name}`;
+})('John'); // Hello John => hợp lệ vì nó đã là function expresssion
+```
