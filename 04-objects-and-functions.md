@@ -477,3 +477,50 @@ Nó sẽ không chạm vào biến greeting vì môi trường thực thi của 
 Cách để sử dụng Global Object để truy cập nó.
 
 # Closures
+
+```javascript
+function greet(whattosay) {
+  return function (name) {
+    console.log(whattosay + " " + name);
+  };
+}
+```
+
+Chúng ta định nghĩa hàm Greet và nó trả về một hàm (trong JS hàm cũng là Object nên có thể trả về được).
+
+Nếu chúng ta gọi làm thế này `greet("Hi")("Thao")` thì kết quả sẽ là `Hi Thao`. Đúng như chúng ta dự kiến. Nhưng hãy xem đoạn code dưới.
+
+```javascript
+var sayHi = greet("Hi");
+sayHi("Thao"); // Hi Thao
+```
+
+Kết quả vẫn như trên. Theo như chúng ta học khi một hàm thực thi sẽ tạo ra Execution Context. Sau khi thực thi xong nó sẽ bị pop ra khỏi stack. Nhưng sau khi hàm greet thực thi xong tại sao nó vẫn biết biến `whattosay` ở đâu mà nó lấy giá trị và kết quả của hàm vẫn đúng như ý của ta. Lý do là vì `Closure`.
+
+![12](12.png)
+
+Hàm `greet` đã bị pop ra khỏi stack nhưng các giá trị biến của nó vẫn còn trong memory. Vì vậy khi mà hàm thực thi nó muốn tìm kiếm biến `whattosay` thì nó phải `scope chain` và ra khỏi outer enviroment để tìm kiếm biến `whattosay` và nhờ `Closure` của JS mà code của chúng ta hoạt động như ý muốn của mình.
+
+Một ví dụ khác
+
+```javascript
+function buildFunctions() {
+  var arr = [];
+
+  for (var i = 0; i < 3; i++) {
+    arr.push(function () {
+      console.log(i);
+    });
+  }
+
+  return arr;
+}
+
+var fs = buildFunctions();
+
+fs[0](); // 3
+fs[1](); // 3
+fs[3](); // 3
+```
+
+Cả 3 hàm trong Arr đều giá trị là 3 vì khi mà thực thi xong hàm buildFunctions thì giá trị của `i = 3`. Và khi thực thi hàm thì nó sẽ ra `outer enviroment` và tìm kiếm `i` và in ra nó. Vì vậy khi in giá trị sẽ là `3` ở cả 3 function.
