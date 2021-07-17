@@ -627,3 +627,58 @@ function multiply(a, b) {
 var multipleByTwo = multiply.bind(this, 2); // trở thành multiply(2, b)
 console.log(multipleByTwo(4)); // 8
 ```
+
+# Functional Programming
+
+```javascript
+var numbers = [1, 2, 3];
+
+// Ví dụng chúng ta muốn tạo một mảng mới có giá trị x2 của mảng numbers
+var numbersByTwo = [];
+
+for (var i = 0; i < numbers.length; i++) {
+  numbersByTwo = numbers[i] * 2;
+}
+
+console.log(numbersByTwo); // [2,4,6]
+
+// Và nếu chúng ta muốn làm một việc khác với từng phần tử mảng thì chúng ta phải lặp lại code. Và nhờ Javascript là ngôn ngữ First Class Function nên chúng ta có thể tận dụng nó tạo một hàm sau
+function mapForEach(arr, fn) {
+  var newArr = [];
+
+  for (var i = 0; i < arr.length; i++) {
+    newArr.push(fn(arr[i]));
+  }
+
+  return newArr;
+}
+
+var numbersByTwo = mapForEach(numbers, function (number) {
+  return number * 2;
+});
+
+console.log(numbersByTwo); // [2, 4, 6] -> cùng kết quả nhưng code clean hơn và hơn thế nữa chúng ta có thể có những logic khác.
+
+var numbersLargerThanTwo = mapForEach(numbers, function (number) {
+  return number > 2 && number;
+});
+
+console.log(numbersLargerThanTwo); // [3] -> đây là một ví dụ đơn giản về Functional Programing. Một cách khác để viết hàm trên.
+
+var checkPastLimit = function (limiter, item) {
+  return item > limiter && item;
+};
+
+var numbersLargerThanOne = mapForEach(numbers, checkPastLimit.bind(this, 1));
+
+// Một phiên bản đơn giản hơn
+var checkPastLimitSimplified = function (limiter) {
+  return function (limiter, item) {
+    return item > liminter && item;
+  }.bind(this, limiter);
+};
+
+var numbersLargerThanOne = mapForEach(numbers, checkPastLimitSimplified(1));
+```
+
+Một trong những thư viện đó là lodash, underscorejs, ... đại diện cho Functional Programing
