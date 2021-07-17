@@ -524,3 +524,106 @@ fs[3](); // 3
 ```
 
 Cả 3 hàm trong Arr đều giá trị là 3 vì khi mà thực thi xong hàm buildFunctions thì giá trị của `i = 3`. Và khi thực thi hàm thì nó sẽ ra `outer enviroment` và tìm kiếm `i` và in ra nó. Vì vậy khi in giá trị sẽ là `3` ở cả 3 function.
+
+# Function Factory
+
+```javascript
+function makeGreeting(language) {
+  return function (firstname, lastname) {
+    if (language === "en") {
+      console.log("Hello " + firstname + " " + lastname);
+    }
+
+    if (language === "es") {
+      console.log("Hola " + firstname + " " + lastname);
+    }
+  };
+}
+
+var greetingEnglish = makeGreeting("en");
+var greetingSpanish = makeGreeting("es");
+
+greetEnglish("John", "Doe"); // Hello John Doe
+greetingSpanish("John", "Doe"); // Hola John Doe
+```
+
+![13](13.png)
+Đây là cách nó tạo ra Closure khi chạy 2 hàm greetEnglish và greetSpanish
+
+# Closure và Callback
+
+```javascript
+function sayHiLater() {
+  var greeting = "Hi";
+
+  setTimeout(function () {
+    console.log(greeting);
+  }, 3000);
+}
+
+sayHiLater(); // Hi
+
+function tellMeWhenDone(callback) {
+  var a = 1000;
+  var b = 2000;
+
+  callback();
+}
+
+tellMeWhenDone(function () {
+  console.log("I am done");
+});
+```
+
+Sau 3 giây thì in ra `Hi`. Nhưng thực chất nó đã tạo ra Closure vì nếu không có Closure thì biến greeting chúng ta đã không có.
+
+Và callback cũng là một hình thức khác của closure
+
+# bind, call, apply
+
+Khi một hàm được tạo ra mặc định nó sẽ có 3 methods (tất cả các hàm đều có 3 methods này) đó là: call, apply, bind
+
+```javascript
+var person = {
+  firstname: "John",
+  lastname: "Doe",
+  getFullName: function () {
+    return this.firstname + " " + this.lastname;
+  },
+};
+
+var logName = function (lang1, lang2) {
+  console.log("Logged: " + this.getFullName()); // this ở đây là global object chứ không phải person
+};
+
+var logPersonName = logName.bind(person); // bind ở đây là nó sẽ gắn this thành person, bind sẽ trả về một object mới
+
+logPersonName(); // Loggedd: John Doe
+
+/**
+  Call và Apply chỉ khác cách truyền tham số vào
+*/
+logName.call(person, "en", "es"); // Loggedd: John Doe
+logName.apply(person, ["en", "es"]); // Loggedd: John Doe
+
+// Một cách sử dụng khác
+(function (lang1, lang2) {
+  console.log("Logged: " + this.getFullName()); // this ở đây là global object chứ không phải person
+}.apply(person, ["en", "es"]));
+
+// function borrowing
+var person2 = {
+  firstname: "Jane",
+  lastname: "Doe",
+};
+
+console.log(person.getFullName.apply(person2)); // Jane Doe
+
+// function currying: tạo ra một bản copy của một hàm nhưng đã có một vài tham số có giá trị sẵn
+function multiply(a, b) {
+  return a * b;
+}
+
+var multipleByTwo = multiply.bind(this, 2); // trở thành multiply(2, b)
+console.log(multipleByTwo(4)); // 8
+```
